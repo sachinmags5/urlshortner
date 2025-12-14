@@ -1,0 +1,24 @@
+import { nanoid } from "nanoid";
+import URL from "../model/url.js";
+
+export const handleGenerateNewShortURL = async (req, res) => {
+  const shortId = nanoid(8);
+  const body = req.body;
+  if (!body.url) return res.status(400).json({ error: "URL is reuired" });
+  await URL.create({
+    shortId: shortId,
+    redirectURL: body.url,
+    visitHistory: [],
+  });
+
+  return res.status(200).json({ id: shortId });
+};
+
+export const handleAnalytics = async (req, res) => {
+  const shortId = req.params.shortId;
+  const result = await URL.findOne({ shortId });
+  return res.status(200).json({
+    totalVisit: result.visitHistory.length,
+    analytics: result.visitHistory,
+  });
+};
