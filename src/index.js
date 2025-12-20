@@ -3,6 +3,10 @@ import { configDotenv } from "dotenv";
 import urlRouter from "./routes/url.js";
 import connectDb from "./connection/connect.js";
 import URL from "./model/url.js";
+import cors from "cors";
+import os from "node:os";
+
+// console.log(os.cpus().length);
 
 configDotenv();
 const PORT = process.env.PORT;
@@ -13,6 +17,7 @@ connectDb();
 
 //middlewares
 app.use(express.json());
+app.use(cors());
 
 //routes
 app.use("/api/url", urlRouter);
